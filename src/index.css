@@ -67,6 +67,13 @@ button {
   padding: 4px 2px 12px;
 }
 
+.header-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
 .app-header h1,
 .editor-sheet h2 {
   margin: 0;
@@ -97,6 +104,12 @@ button {
 
 .icon-button.danger {
   color: var(--danger);
+}
+
+.icon-button.active {
+  color: #ffffff;
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 .date-strip {
@@ -149,6 +162,11 @@ button {
   height: 1488px;
   touch-action: pan-y;
   user-select: none;
+}
+
+.day-grid.is-drawing {
+  cursor: crosshair;
+  touch-action: none;
 }
 
 .time-row {

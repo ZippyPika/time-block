@@ -4,6 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  PencilLine,
   Plus,
   RotateCcw,
   Settings,
@@ -75,6 +76,7 @@ function App() {
   const [activeDate, setActiveDate] = useState(dateKey(new Date()))
   const [draft, setDraft] = useState<Draft | null>(null)
   const [selection, setSelection] = useState<DragSelection | null>(null)
+  const [isDrawMode, setIsDrawMode] = useState(false)
   const [notice, setNotice] = useState('已准备记录今天')
   const gridRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -242,23 +244,41 @@ function App() {
           <p className="eyebrow">时间块</p>
           <h1>{activeView === 'today' ? '今天怎么过' : viewTitle(activeView)}</h1>
         </div>
-        <button
-          type="button"
-          className="icon-button"
-          aria-label="新增记录"
-          onClick={() =>
-            openDraft({
-              kind: 'new',
-              date: activeDate,
-              startSlot: 18,
-              slotCount: 2,
-              category: 'study',
-              label: DEFAULT_LABELS.study[0],
-            })
-          }
-        >
-          <Plus size={20} />
-        </button>
+        <div className="header-actions">
+          {activeView === 'today' && (
+            <button
+              type="button"
+              className={isDrawMode ? 'icon-button active' : 'icon-button'}
+              aria-label="涂块记录"
+              aria-pressed={isDrawMode}
+              title="涂块记录"
+              onClick={() => {
+                setIsDrawMode((current) => !current)
+                setSelection(null)
+                setNotice(isDrawMode ? '已退出涂块模式' : '涂块模式已开启')
+              }}
+            >
+              <PencilLine size={20} />
+            </button>
+          )}
+          <button
+            type="button"
+            className="icon-button"
+            aria-label="新增记录"
+            onClick={() =>
+              openDraft({
+                kind: 'new',
+                date: activeDate,
+                startSlot: 18,
+                slotCount: 2,
+                category: 'study',
+                label: DEFAULT_LABELS.study[0],
+              })
+            }
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </header>
 
       <section className="date-strip" aria-label="日期选择">
@@ -296,6 +316,7 @@ function App() {
         <TodayView
           blocks={dayBlocks}
           gridRef={gridRef}
+          isDrawMode={isDrawMode}
           selection={selection}
           onPointerDown={(clientY, pointerType) => {
             const slot = slotFromPointer(clientY)
@@ -305,6 +326,7 @@ function App() {
             if (selection) {
               if (
                 selection.pointerType === 'touch' &&
+                !isDrawMode &&
                 Math.abs(clientY - selection.startY) > 18
               ) {
                 setSelection(null)
@@ -400,6 +422,7 @@ function App() {
 function TodayView({
   blocks,
   gridRef,
+  isDrawMode,
   selection,
   onPointerDown,
   onPointerMove,
@@ -407,6 +430,7 @@ function TodayView({
 }: {
   blocks: TimeBlock[]
   gridRef: RefObject<HTMLDivElement | null>
+  isDrawMode: boolean
   selection: DragSelection | null
   onPointerDown: (clientY: number, pointerType: string) => void
   onPointerMove: (clientY: number) => void
@@ -416,8 +440,13 @@ function TodayView({
     <section className="today-panel">
       <div
         ref={gridRef}
-        className="day-grid"
-        onPointerDown={(event) => onPointerDown(event.clientY, event.pointerType)}
+        className={isDrawMode ? 'day-grid is-drawing' : 'day-grid'}
+        onPointerDown={(event) => {
+          if (isDrawMode) {
+            event.preventDefault()
+          }
+          onPointerDown(event.clientY, event.pointerType)
+        }}
         onPointerMove={(event) => onPointerMove(event.clientY)}
       >
         {timeSlots.map((slot) => (
