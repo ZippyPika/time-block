@@ -92,6 +92,7 @@ describe('time utilities', () => {
       study: 3,
       entertainment: 0,
       routine: 0,
+      game: 0,
     })
   })
 

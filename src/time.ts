@@ -102,7 +102,7 @@ export function totalsForDate(
         totals[block.category] += block.slotCount
         return totals
       },
-      { sleep: 0, study: 0, entertainment: 0, routine: 0 },
+      { sleep: 0, study: 0, entertainment: 0, routine: 0, game: 0 },
     )
 }
 

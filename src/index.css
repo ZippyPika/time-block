@@ -263,7 +263,7 @@ button {
   display: grid;
   min-width: 820px;
   grid-template-columns: 62px repeat(7, 108px);
-  grid-template-rows: 54px 1440px;
+  grid-template-rows: 54px repeat(48, 30px);
 }
 
 .week-time-header,
@@ -307,7 +307,8 @@ button {
 
 .week-day-column {
   position: relative;
-  grid-row: 2;
+  grid-row: 2 / span 48;
+  min-height: 1440px;
   border-left: 1px solid rgba(185, 173, 152, 0.45);
   background: repeating-linear-gradient(
     to bottom,
@@ -553,7 +554,7 @@ meter::-webkit-meter-optimum-value {
 }
 
 .category-picker {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .category-picker button,

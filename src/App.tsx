@@ -69,6 +69,7 @@ type DragSelection = {
 }
 
 const timeSlots = Array.from({ length: SLOTS_PER_DAY }, (_, slot) => slot)
+const WEEK_SLOT_HEIGHT = 30
 
 function App() {
   const [blocks, setBlocks] = useState<TimeBlock[]>([])
@@ -532,7 +533,7 @@ function WeekView({
         ))}
 
         {timeSlots.map((slot) => (
-          <div className="week-time-cell" key={slot}>
+          <div className="week-time-cell" key={slot} style={{ gridRow: slot + 2 }}>
             {formatSlot(slot)}
           </div>
         ))}
@@ -549,8 +550,8 @@ function WeekView({
                     key={block.id}
                     className="week-block"
                     style={{
-                      top: `${(block.startSlot / SLOTS_PER_DAY) * 100}%`,
-                      height: `${(block.slotCount / SLOTS_PER_DAY) * 100}%`,
+                      top: `${block.startSlot * WEEK_SLOT_HEIGHT}px`,
+                      height: `${block.slotCount * WEEK_SLOT_HEIGHT}px`,
                       background: category.color,
                       color: category.textColor,
                     }}

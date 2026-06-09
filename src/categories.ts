@@ -29,6 +29,13 @@ export const CATEGORIES: Category[] = [
     strongColor: '#dc7e8d',
     textColor: '#55212a',
   },
+  {
+    id: 'game',
+    name: '游戏',
+    color: '#c9b8ff',
+    strongColor: '#8f73e8',
+    textColor: '#30205e',
+  },
 ]
 
 export const CATEGORY_MAP = CATEGORIES.reduce(
@@ -44,4 +51,5 @@ export const DEFAULT_LABELS: Record<CategoryId, string[]> = {
   study: ['开题', '上课', '组会', '看论文', '写作'],
   entertainment: ['B站', '看综艺', '小红书', '刷手机'],
   routine: ['吃饭', '洗漱', '收拾', '洗衣', '在路上'],
+  game: ['三角洲', '王者', '围棋', '无畏契约'],
 }
