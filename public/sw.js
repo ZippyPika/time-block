@@ -1,4 +1,4 @@
-const CACHE_NAME = 'time-block-pwa-v1'
+const CACHE_NAME = 'time-block-pwa-v2'
 const APP_SHELL = [
   './',
   './index.html',
@@ -27,6 +27,25 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') {
+    return
+  }
+
+  const isNavigation =
+    event.request.mode === 'navigate' ||
+    event.request.headers.get('accept')?.includes('text/html')
+
+  if (isNavigation) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone()
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(new URL('./index.html', self.registration.scope), copy)
+          })
+          return response
+        })
+        .catch(() => caches.match(new URL('./index.html', self.registration.scope))),
+    )
     return
   }
 
