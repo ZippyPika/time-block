@@ -239,77 +239,79 @@ function App() {
 
   return (
     <main className="app-shell">
-      <header className="app-header">
-        <div>
-          <p className="eyebrow">时间块</p>
-          <h1>{activeView === 'today' ? '今天怎么过' : viewTitle(activeView)}</h1>
-        </div>
-        <div className="header-actions">
-          {activeView === 'today' && (
+      <div className="top-controls">
+        <header className="app-header">
+          <div>
+            <p className="eyebrow">时间块</p>
+            <h1>{activeView === 'today' ? '今天怎么过' : viewTitle(activeView)}</h1>
+          </div>
+          <div className="header-actions">
+            {activeView === 'today' && (
+              <button
+                type="button"
+                className={isDrawMode ? 'icon-button active' : 'icon-button'}
+                aria-label="涂块记录"
+                aria-pressed={isDrawMode}
+                title="涂块记录"
+                onClick={() => {
+                  setIsDrawMode((current) => !current)
+                  setSelection(null)
+                  setNotice(isDrawMode ? '已退出涂块模式' : '涂块模式已开启')
+                }}
+              >
+                <PencilLine size={20} />
+              </button>
+            )}
             <button
               type="button"
-              className={isDrawMode ? 'icon-button active' : 'icon-button'}
-              aria-label="涂块记录"
-              aria-pressed={isDrawMode}
-              title="涂块记录"
-              onClick={() => {
-                setIsDrawMode((current) => !current)
-                setSelection(null)
-                setNotice(isDrawMode ? '已退出涂块模式' : '涂块模式已开启')
-              }}
+              className="icon-button"
+              aria-label="新增记录"
+              onClick={() =>
+                openDraft({
+                  kind: 'new',
+                  date: activeDate,
+                  startSlot: 18,
+                  slotCount: 2,
+                  category: 'study',
+                  label: DEFAULT_LABELS.study[0],
+                })
+              }
             >
-              <PencilLine size={20} />
+              <Plus size={20} />
             </button>
-          )}
+          </div>
+        </header>
+
+        <section className="date-strip" aria-label="日期选择">
           <button
             type="button"
             className="icon-button"
-            aria-label="新增记录"
-            onClick={() =>
-              openDraft({
-                kind: 'new',
-                date: activeDate,
-                startSlot: 18,
-                slotCount: 2,
-                category: 'study',
-                label: DEFAULT_LABELS.study[0],
-              })
-            }
+            aria-label="前一天"
+            onClick={() => setActiveDate(addDays(activeDate, -1))}
           >
-            <Plus size={20} />
+            <ChevronLeft size={20} />
           </button>
+          <button
+            type="button"
+            className="date-pill"
+            onClick={() => setActiveDate(dateKey(new Date()))}
+          >
+            <strong>{displayDate(activeDate)}</strong>
+            <span>{weekdayName(activeDate)}</span>
+          </button>
+          <button
+            type="button"
+            className="icon-button"
+            aria-label="后一天"
+            onClick={() => setActiveDate(addDays(activeDate, 1))}
+          >
+            <ChevronRight size={20} />
+          </button>
+        </section>
+
+        <div className="notice" role="status">
+          {notice}
         </div>
-      </header>
-
-      <section className="date-strip" aria-label="日期选择">
-        <button
-          type="button"
-          className="icon-button"
-          aria-label="前一天"
-          onClick={() => setActiveDate(addDays(activeDate, -1))}
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <button
-          type="button"
-          className="date-pill"
-          onClick={() => setActiveDate(dateKey(new Date()))}
-        >
-          <strong>{displayDate(activeDate)}</strong>
-          <span>{weekdayName(activeDate)}</span>
-        </button>
-        <button
-          type="button"
-          className="icon-button"
-          aria-label="后一天"
-          onClick={() => setActiveDate(addDays(activeDate, 1))}
-        >
-          <ChevronRight size={20} />
-        </button>
-      </section>
-
-      <div className="notice" role="status">
-        {notice}
       </div>
 
       {activeView === 'today' && (

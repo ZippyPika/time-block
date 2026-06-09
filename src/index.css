@@ -59,6 +59,17 @@ button {
     calc(92px + env(safe-area-inset-bottom));
 }
 
+.top-controls {
+  position: sticky;
+  top: 0;
+  z-index: 18;
+  margin: -8px -14px 10px;
+  padding: 8px 14px 10px;
+  border-bottom: 1px solid rgba(222, 215, 200, 0.75);
+  background: rgba(248, 245, 238, 0.92);
+  backdrop-filter: blur(18px);
+}
+
 .app-header {
   display: flex;
   align-items: center;
